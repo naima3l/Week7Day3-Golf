@@ -40,8 +40,6 @@ namespace Week7Day3.Repositories
 
         public void Update(User user)
         {
-            var userToDelete = GetById(user.Id);
-            Delete(userToDelete);
             Insert(user);
         }
     }

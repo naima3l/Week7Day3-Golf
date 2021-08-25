@@ -32,9 +32,74 @@ namespace Week7Day3
         internal static void UpdateUser()
         {
             User userChosen = ChooseUser();
-            User user = UserData();
-            user.Id = userChosen.Id;
+
+            if (userChosen.Id == null)
+            {
+                ur.Delete(userChosen);
+            }
+
+            User user = ChangeUserData(userChosen);
+            
+            //User user = UserData();
+            //user.Id = userChosen.Id;
             ur.Update(user);
+        }
+
+        private static User ChangeUserData(User user)
+        {
+            bool check = true;
+            int choice;
+            do
+            {
+                Console.WriteLine("Quale dato vuoi modificare? \n1. Nome \n2.Cognome \n3.Anno di nascita \n4.Sesso \n5.Tesserato \n0.Per non modificare");
+                while (!int.TryParse(Console.ReadLine(), out choice) || choice < 0 || choice > 5)
+                {
+                    Console.WriteLine("Scelta non valida! Riprova.");
+                }
+
+                switch (choice)
+                {
+                    case 1:
+                        Console.WriteLine("Inserisci il nome :");
+                        user.Name = Console.ReadLine();
+                        break;
+                    case 2:
+                        Console.WriteLine("Inserisci il cognome :");
+                        user.Surname = Console.ReadLine();
+                        break;
+                    case 3:
+                        Console.WriteLine("Inserisci la data di nascita :");
+                        DateTime date = new DateTime();
+                        while (!DateTime.TryParse(Console.ReadLine(), out date))
+                        {
+                            Console.WriteLine("Riprova.");
+                        }
+                        user.BirthDate = date;
+                        break;
+                    case 4:
+                        Console.WriteLine("Inserisci il sesso, 0 maschio o 1 femmina :");
+                        int s = 0;
+                        while (!int.TryParse(Console.ReadLine(), out s) || s < 0 || s > 1)
+                        {
+                            Console.WriteLine("Scelta non valida! Riprova.");
+                        }
+                        user.Sex = (EnumSex)s;
+                        break;
+                    case 5:
+                        Console.WriteLine("Inserisci 'false' se non è registrato, 'true' se lo è :");
+                        bool r = true;
+                        while (!bool.TryParse(Console.ReadLine(), out r))
+                        {
+                            Console.WriteLine("Scelta non valida! Riprova.");
+                        }
+                        user.Registred = r;
+                        break;
+                    case 0:
+                        check = false;
+                        break;
+                }
+            } while (check);
+            return user;
         }
 
         internal static void DeleteUser()
